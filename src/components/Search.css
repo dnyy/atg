@@ -1,0 +1,24 @@
+.search-wrapper {
+  margin: 20px;
+}
+
+.search-button {
+  border: none;
+  padding: 10px 30px;
+  outline: none;
+  cursor: pointer;
+  color: white;
+  background-color: #014f9f;
+  border-radius: 38px;
+  transition: all 0.2s ease-in-out;
+}
+
+.search-button:hover {
+  background-color: white;
+  color: #014f9f;
+}
+
+.search-input {
+  padding: 10px;
+  margin-right: 10px;
+}
