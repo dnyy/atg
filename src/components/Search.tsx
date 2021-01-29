@@ -5,7 +5,7 @@ interface SearchProps {
 }
 
 const Search: React.FC<SearchProps> = ({ onClick }) => {
-  const [input, setInput] = useState('')
+  const [input, setInput] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -17,17 +17,17 @@ const Search: React.FC<SearchProps> = ({ onClick }) => {
 
   const handleClick = () => {
     if (input) {
-      onClick(input)
+      onClick(input);
     }
-    setInput('')
-  }
+    setInput('');
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInput(e.target.value)
+    setInput(e.target.value);
   };
 
   return (
-    <div className="search-wrapper" data-testid="search">
+    <div className="search-wrapper">
       <input
         className="search-input"
         ref={inputRef}
@@ -35,9 +35,11 @@ const Search: React.FC<SearchProps> = ({ onClick }) => {
         placeholder="Speltyp"
         onChange={handleChange}
       />
-      <button className="search-button" onClick={handleClick} data-testid="searchButton">Sök</button>
+      <button disabled={!input} className="search-button" onClick={handleClick}>
+        Sök
+      </button>
     </div>
-  )
-}
+  );
+};
 
 export default Search;

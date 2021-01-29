@@ -13,7 +13,13 @@
   transition: all 0.2s ease-in-out;
 }
 
-.search-button:hover {
+.search-button:disabled {
+  color: #c5c5c5;
+  background-color: #6b6b6b;
+  cursor: not-allowed;
+}
+
+.search-button:hover:enabled {
   background-color: white;
   color: #014f9f;
 }

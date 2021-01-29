@@ -1,61 +1,37 @@
-import { render, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import Search from './Search';
 
-it('renders correctly', () => {
-  const onClick = jest.fn()
-  const { queryByTestId, queryByPlaceholderText} = render(<Search onClick={onClick} />);
-
-  expect(queryByTestId('searchButton')).toBeTruthy();
-  expect(queryByPlaceholderText('Speltyp')).toBeTruthy();
-})
-
 describe('input value', () => {
-  it('updates on change', () => {
-    const onClick = jest.fn();
-    
-    const { queryByPlaceholderText } = render(<Search onClick={onClick} />);
-    const searchInput = queryByPlaceholderText('Speltyp') as HTMLInputElement;
+  it('render input field and updates on change', () => {
+    render(<Search onClick={jest.fn()} />);
+    const inputField = screen.getByRole('textbox');
+    expect(inputField).toBeInTheDocument();
 
-    const mockTypingEvent = {
-      target: {
-        value: "V75"
-      }
-    }
-
-    fireEvent.change((searchInput), mockTypingEvent);
-
-    expect(searchInput.value).toBe("V75");
+    userEvent.type(inputField, 'v75');
+    expect(inputField).toHaveValue('v75');
   });
-})
+  it('should check that the search button is disabled if input field is empty', () => {
+    render(<Search onClick={jest.fn()} />);
 
-describe('search button', () => {
-  const mockTypingEvent = {
-    target: {
-      value: "V75"
-    }
-  }
-  describe('with search input', () => {
-    it('does not trigger search function', () => {
-      const onClick = jest.fn()
-      const { queryByTestId } = render(<Search onClick={onClick} />);
-      
-      fireEvent.click(queryByTestId('searchButton'));
-      expect(onClick).not.toBeCalled();
-    });
+    const inputField = screen.getByRole('textbox');
+    userEvent.clear(inputField);
+
+    const searchButton = screen.getByRole('button', { name: /sök/i });
+    expect(searchButton).toBeDisabled();
+
+    userEvent.type(inputField, 'V75');
+    expect(searchButton).toBeEnabled();
   });
+  it('should clear and focus on input when user clicks search button', () => {
+    render(<Search onClick={jest.fn()} />);
 
-  describe('with data in search input', () => {
-    it('triggers the onClick search function', () => {
-      const onClick = jest.fn();
-      const { queryByTestId, queryByPlaceholderText } = render(<Search onClick={onClick} />);
-      
-      const searchInput = queryByPlaceholderText('Speltyp') as HTMLInputElement;
-      fireEvent.change((searchInput), mockTypingEvent);
+    const inputField = screen.getByRole('textbox');
+    userEvent.type(inputField, 'V75');
 
-      fireEvent.click(queryByTestId('searchButton'));
-      expect(onClick).toHaveBeenCalled();
-    })
-  })
-  
-  
-})
+    const searchButton = screen.getByRole('button', { name: /sök/i });
+    userEvent.click(searchButton);
+    expect(inputField).toHaveValue('');
+    expect(inputField).toHaveFocus();
+  });
+});
